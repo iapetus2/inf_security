@@ -1,44 +1,15 @@
 import numpy as np
-import numpy
-from gf2 import inv, mul, add, gen_non_singular, gen_permutation, gen_diag, gen_cn
-
-import h5py
+from .gf2 import *
 
 
 class Decryptor:
-    k = 8
-    n = 255
-    t = 1
-
-    M = np.empty((n, n))
-    W = np.empty((n, n))
-    D = np.empty((n, n))
-    P = np.empty((n, n))
-    G = np.empty((k, n))
-    C_n = np.empty((n, n))
-    H = np.empty((n - k, n))
-
-    G_pub = np.empty((k, n))
-    E_pub = np.empty((n, n))
-
     def __init__(self, k=8, n=255, t=1):
         self.n = n
         self.k = k
         self.t = t
 
-        f = h5py.File('ham.h5', 'r')
-        gen = np.array(f["DS1"][:])
-        gen = gen.T
-        gen = numpy.round(gen)
-        gen = gen.astype(int)
-
-        f2 = h5py.File('ham2.h5', 'r')
-        Hm = np.array(f2["DS1"][:])
-        Hm = Hm.T
-        Hm = numpy.round(Hm)
-        Hm = Hm.astype(int)
-
-        self.H = Hm
+        self.G = read_matrix('data/ham.h5')
+        self.H = read_matrix('data/ham2.h5')
 
         self.M = gen_non_singular((self.n, self.n))
         self.W = gen_non_singular((self.n, self.n))
@@ -46,11 +17,14 @@ class Decryptor:
         self.D = gen_diag(self.t, self.n)
         self.P = gen_permutation(self.n)
 
-        self.G = gen
         self.C_n = gen_cn(self.G)
 
         self.G_pub = mul(self.G, self.M)
-        self.E_pub = mul(self.W, mul(self.D, mul(add(self.C_n, self.P), self.M)))
+        self.E_pub = mul(self.W, mul(
+            self.D, mul(add(self.C_n, self.P), self.M)))
+
+    def get_public_key(self):
+        return (self.E_pub, self.G_pub)
 
     def decrypt(self, y):
         y_i = mul(y, inv(self.M))
@@ -84,14 +58,6 @@ class Decryptor:
 
 
 class Encryptor:
-    k = 8
-    n = 255
-    t = 1
-    e = np.empty((1, n))
-
-    G_pub = np.empty((k, n))
-    E_pub = np.empty((n, n))
-
     def __init__(self,  G_pub, E_pub, k=8, n=255, t=1):
         self.n = n
         self.k = k
@@ -103,4 +69,3 @@ class Encryptor:
 
     def encrypt(self, message):
         return add(mul(message, self.G_pub), mul(self.e, self.E_pub))
-
