@@ -1,30 +1,18 @@
 import numpy as np
 from crypto import Decryptor, Encryptor
-from gf2 import inv, mul, add
 
-I = np.array([[0, 1, 0],
-              [1, 0, 0],
-              [0, 0, 1]])
 
-decryptor = Decryptor()
-E_pub_de = decryptor.E_pub
-G_pub_de = decryptor.G_pub
+decryptor = Decryptor(k=8, n=255, t=1)
+E_pub = decryptor.E_pub
+G_pub = decryptor.G_pub
 
-encryptor = Encryptor(G_pub_de, E_pub_de)
+encryptor = Encryptor(G_pub, E_pub, k=8, n=255, t=1)
 
-message = np.random.randint(low=0, high=1023, size=(1, 4)) % 2
+message = np.random.randint(low=0, high=1023, size=(1, 8)) % 2
+print('Message:')
 print(message)
+ciphered_message = encryptor.encrypt(message)
 
-y = encryptor.encrypt(message)
-
-m_d = decryptor.decrypt(y, encryptor.e)
-print(m_d)
-
-for i in range(10):
-    print(2 ** i - i - 1)
-
-
-
-
-
-
+print('Decrypted message:')
+decrypted_message = decryptor.decrypt(ciphered_message)
+print(decrypted_message)

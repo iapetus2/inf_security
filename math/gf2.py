@@ -18,11 +18,9 @@ def inv(arg):
 
 
 def gen_non_singular(shape):
-    s = np.random.randint(low=0, high=1023, size=shape) % 2
-    while round(np.linalg.det(s)) % 2 == 0:
-        s = np.random.randint(low=0, high=1023, size=shape) % 2
-
-    return s
+    s = np.identity(shape[0], dtype=int)
+    np.random.shuffle(s)
+    return inv(s)
 
 
 def gen_diag(t, dim):
@@ -48,41 +46,8 @@ def gen_cn(G):
     k = np.shape(G)[0]
     n = np.shape(G)[1]
 
-    u_rand = np.random.randint(low=0, high=1023, size=(1, k)) % 2
-    while np.sum(u_rand ** 2) == 0:
-        u_rand = np.random.randint(low=0, high=1023, size=(1, k)) % 2
-
-
-
-    c = mul(u_rand, G)
-
-    C_n = np.zeros(shape=(n, n), dtype=int)
-    cnt = 0
-
-    for i in range(n):
-        if c[0, i] == 0:
-            C_n[i] = np.random.randint(low=0, high=1023, size=n) % 2
-        else:
-            cnt = cnt + 1
-
-    u_rand_2 = np.random.randint(low=0, high=1023, size=(cnt, k)) % 2
-    while np.sum(u_rand_2 ** 2) == 0:
-        u_rand_2 = np.random.randint(low=0, high=1023, size=(cnt, k)) % 2
-
-    c_2 = mul(u_rand_2, G)
-
-    summa = np.zeros(shape=n, dtype=int)
-
-    cnt1 = 0
-    for i in range(n):
-        if c[0, i] == 1:
-            if cnt1 == cnt - 1:
-                C_n[i] = add(c, -summa)
-            else:
-                C_n[i] = c_2[cnt1]
-                summa = add(summa, c_2[cnt1])
-                cnt1 = cnt1 + 1
-
+    U_rand = np.random.randint(low=0, high=1023, size=(n, k)) % 2
+    C_n = mul(U_rand, G)
     return C_n
 
 
