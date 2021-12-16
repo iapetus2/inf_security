@@ -1,17 +1,26 @@
 import numpy as np
-from src.crypto import Decryptor, Encryptor
+from crypto_math.crypto import *
+
+keys_generator = IKKRKeys(k=8, n=255, t=1)
+keys_generator.generate_keys()
+keys_generator.write_public_keys('data/keys/public_key.txt')
+keys_generator.write_private_keys('data/keys/private_key.txt')
+
+message = input('Message: ')
+ciphered_message = []
+for symbol in message:
+    bits = tobits(symbol)
+    ciphered_symbol = encrypt(bits, 'data/keys/public_key.txt')
+    ciphered_message.append(ciphered_symbol[0])
 
 
-decryptor = Decryptor(k=8, n=255, t=1)
-E_pub, G_pub = decryptor.get_public_key()
+print(len(ciphered_message))
 
-encryptor = Encryptor(G_pub, E_pub, k=8, n=255, t=1)
 
-message = np.random.randint(low=0, high=1023, size=(8)) % 2
-print('Message:')
-print(message)
-ciphered_message = encryptor.encrypt(message)
+deciphered_message = []
+for ciphered_symbol in ciphered_message:
+    bits = decrypt(ciphered_symbol, 'data/keys/public_key.txt', 'data/keys/private_key.txt')
+    curr_symbol = frombits(bits)
+    deciphered_message.append(curr_symbol)
 
-print('Decrypted message:')
-decrypted_message = decryptor.decrypt(ciphered_message)
-print(decrypted_message)
+print(''.join(deciphered_message))

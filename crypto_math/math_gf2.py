@@ -10,16 +10,6 @@ def mul(arg1, arg2):
     return (arg1 @ arg2) % 2
 
 
-def read_matrix(path_to_file):
-    f = h5py.File(path_to_file, 'r')
-    matrix = np.array(f["DS1"][:])
-    matrix = matrix.T
-    matrix = np.round(matrix)
-    matrix = matrix.astype(int)
-
-    return matrix
-
-
 def inv(arg):
     inv_f = np.linalg.inv(arg) * np.linalg.det(arg)
     inv_f = np.round(inv_f)
