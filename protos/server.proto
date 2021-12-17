@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+
+service IKKR {
+  rpc GetPublicKeys (GetKeysInput) returns (GetKeysOutput) {}
+  rpc PutPublicKeys (PutKeysInput) returns (PutKeysOutput);
+  rpc ReadThis(ReadInput) returns (ReadOutput) {}
+}
+
+message GetKeysInput {
+}
+
+message GetKeysOutput {
+    repeated string listofbits = 1;
+}
+
+message PutKeysInput {
+  repeated string listofbits = 1;
+}
+
+message PutKeysOutput {
+}
+
+message ReadInput {
+  repeated string listofbits = 1;
+}
+
+message ReadOutput {
+  repeated string listofbits = 1;
+}

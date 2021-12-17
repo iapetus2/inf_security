@@ -29,7 +29,7 @@ class IKKRKeys:
         E_pub = m[: n]
         G_pub = m[n:]
 
-        return G_pub, E_pub
+        return E_pub, G_pub
 
     @staticmethod
     def read_private_key(path_to_file):
@@ -59,13 +59,30 @@ class IKKRKeys:
         self.G_pub = mul(self.G, self.M)
         self.E_pub = mul(self.W, mul(D, mul(add(self.C_n, self.P), self.M)))
 
+        return self
 
-def decrypt(cipher_message, path_to_public_keys, path_to_private_keys):
+    def get_public_keys(self):
+        return self.E_pub, self.G_pub
+
+    def get_private_keys(self):
+        return self.M, self.P, self.C_n
+
+    @staticmethod
+    def get_curr_keys(a, b):
+        return a, b
+
+
+def decrypt(cipher_message, path_to_public_keys=None, path_to_private_keys=None, public_keys=None, private_keys=None):
     H = IKKRKeys.read_ham_matrix('./data/ham_matrix/ham2.h5')
-    G_pub, E_pub = IKKRKeys.read_public_key(path_to_public_keys)
+    if not path_to_public_keys is None:
+        E_pub, G_pub = IKKRKeys.read_public_key(path_to_public_keys)
+        M, P, C_n = IKKRKeys.read_private_key(path_to_private_keys)
+    else:
+        E_pub, G_pub = public_keys
+        M, P, C_n = private_keys
     n = len(E_pub)
     k = len(G_pub)
-    M, P, C_n = IKKRKeys.read_private_key(path_to_private_keys)
+    
 
     y_i = mul(cipher_message, inv(M))
 
@@ -97,8 +114,11 @@ def decrypt(cipher_message, path_to_public_keys, path_to_private_keys):
     return mul(mG_pub_cut, inv(G_pub_cut))
 
 
-def encrypt(message, path_to_public_keys):
-    G_pub, E_pub = IKKRKeys.read_public_key(path_to_public_keys)
+def encrypt(message, path_to_public_keys=None, public_keys=None):
+    if not path_to_public_keys is None:
+        E_pub, G_pub = IKKRKeys.read_public_key(path_to_public_keys)
+    else:
+        E_pub, G_pub = public_keys
     n = len(E_pub)
     e = np.random.randint(low=0, high=1023, size=(1, n)) % 2
 
