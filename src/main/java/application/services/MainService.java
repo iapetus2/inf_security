@@ -22,7 +22,7 @@ public class MainService {
     public HttpGenerator httpGenerator;
     public Executor executor;
 
-    private static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\data\\keys\\";
+    private static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\src\\main\\java\\application\\python\\data\\keys\\";
 
     @Autowired
     public MainService(Interpreter interpreter, MainManager mainManager, HttpGenerator httpGenerator, Executor executor) {
@@ -46,7 +46,7 @@ public class MainService {
             mainManager.openKey = Paths.get(PATH + "my_public_key.txt");
             mainManager.secretKey = Paths.get(PATH + "my_secret_key.txt");
 
-            httpGenerator.executePost("http://localhost:8081/", mainManager.pathAsString(mainManager.openKey));
+            httpGenerator.executePost("http://localhost:8081/openKey", mainManager.pathAsString(mainManager.openKey));
 
             return mainManager.pathAsString(mainManager.openKey);
         } else {
@@ -55,7 +55,7 @@ public class MainService {
     }
 
     public void receivedMessage(String inputFile) throws Exception {
-        Path originalPath = Paths.get("/data/decr/input.txt");
+        Path originalPath = Paths.get("/application/python/data/decr/input.txt");
         OutputStream file = new FileOutputStream(originalPath.toFile());
         file.write(inputFile.getBytes());
         file.close();
