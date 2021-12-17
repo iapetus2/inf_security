@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 @Component
 public class MainManager {
 
-    private static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\src\\main\\java\\application\\python\\data\\";
+    private static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\data\\";
 
     public Interpreter interpreter;
     public HttpGenerator httpGenerator;
@@ -52,7 +52,7 @@ public class MainManager {
             inputStream.close();
             System.out.println(PATH + "keys\\my_public_key.txt");
             secretKey = Paths.get(PATH + "keys\\my_private_key.txt");
-            String response = httpGenerator.executePost("http:\\\\localhost:8081\\openKey", pathAsString(openKey));
+            String response = httpGenerator.executePost("http:\\localhost:8081\\openKey", pathAsString(openKey));
             Path originalPath = Paths.get(PATH + "keys\\another_public_key.txt");
             OutputStream file = new FileOutputStream(originalPath.toFile());
             if (response != null) {
@@ -67,7 +67,7 @@ public class MainManager {
         }
         interpreter.executeEncryptScript();
         encryptedMessage = Paths.get(PATH + "\\encr\\output.txt");
-        httpGenerator.executePost("http:\\\\localhost:8081\\message", pathAsString(encryptedMessage));
+        httpGenerator.executePost("http:\\localhost:8081\\message", pathAsString(encryptedMessage));
         message = createPath(PATH + "decr\\input.txt");
     }
 

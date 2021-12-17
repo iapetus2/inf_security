@@ -9,8 +9,8 @@ class IKKRKeys:
         self.n = n
         self.t = t
 
-        self.G = self.read_ham_matrix('./data/ham_matrix/ham.h5')
-        self.H = self.read_ham_matrix('./data/ham_matrix/ham2.h5')
+        self.G = self.read_ham_matrix('C:/Users/khafi/IdeaProjects/Bob/inf_security_main/data/ham_matrix/ham.h5')
+        self.H = self.read_ham_matrix('C:/Users/khafi/IdeaProjects/Bob/inf_security_main/data/ham_matrix/ham2.h5')
 
     @staticmethod
     def read_ham_matrix(path_to_file):

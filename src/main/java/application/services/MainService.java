@@ -22,7 +22,7 @@ public class MainService {
     public HttpGenerator httpGenerator;
     public Executor executor;
 
-    private static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\src\\main\\java\\application\\python\\data\\keys\\";
+    private static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\data\\keys\\";
 
     @Autowired
     public MainService(Interpreter interpreter, MainManager mainManager, HttpGenerator httpGenerator, Executor executor) {
@@ -55,7 +55,7 @@ public class MainService {
     }
 
     public void receivedMessage(String inputFile) throws Exception {
-        Path originalPath = Paths.get("/application/python/data/decr/input.txt");
+        Path originalPath = Paths.get("/python/data/decr/input.txt");
         OutputStream file = new FileOutputStream(originalPath.toFile());
         file.write(inputFile.getBytes());
         file.close();

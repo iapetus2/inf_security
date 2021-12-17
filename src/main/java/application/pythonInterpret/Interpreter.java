@@ -8,7 +8,7 @@ import java.io.IOException;
 @Component
 public class Interpreter {
 
-    public static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\src\\main\\java\\application\\python\\";
+    public static final String PATH = "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\";
 
     @Autowired
     public Interpreter(){}
@@ -24,13 +24,13 @@ public class Interpreter {
     }
 
     public void executeInitScript() throws IOException, InterruptedException {
-        System.out.println("C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\src\\main\\java\\application\\python\\init_decryptor.py");
+        System.out.println("C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\init_decryptor.py");
         executeScript(PATH + "init_decryptor.py");
         System.out.println("Initialization complete");
     }
 
     public void executeScript(String pathToScript) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder("py", "C:\\Users\\khafi\\IdeaProjects\\Bob\\inf_security_main\\src\\main\\java\\application\\python\\init_decryptor.py");
+        ProcessBuilder processBuilder = new ProcessBuilder("py", pathToScript);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         process.waitFor();
